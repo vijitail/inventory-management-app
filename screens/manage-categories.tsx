@@ -1,15 +1,9 @@
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { FlatList, KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { useCategoryStore } from "../stores/category-store";
 import { AddEditCategory } from "../components/manage-categories/AddEditCategory";
 import { Button, Text } from "react-native-paper";
-import { useEffect, useState } from "react";
+import { useColumns } from "../hooks/useColumnWidth";
 // import KeyboardSpacer from "react-native-keyboard-spacer";
 
 export const ManageCategoriesScreen = () => {
@@ -19,19 +13,7 @@ export const ManageCategoriesScreen = () => {
 
   const addCategory = useCategoryStore((state) => state.addCategory);
 
-  const { width } = useWindowDimensions();
-
-  const columnWidth = 320;
-
-  const calculateColumns = (width: number) => {
-    return width > (columnWidth + 16) * 2 ? 2 : 1;
-  };
-
-  const [columns, setColumns] = useState(1);
-
-  useEffect(() => {
-    setColumns(calculateColumns(width));
-  }, [width]);
+  const { columns, columnWidth } = useColumns();
 
   return (
     <ScreenWrapper withScrollView={false}>
@@ -54,13 +36,10 @@ export const ManageCategoriesScreen = () => {
             data={categories}
             renderItem={({ item }) => (
               <View
-                style={{
-                  flex: 1,
-                  width: "100%",
-                  maxWidth: columnWidth,
-                  alignItems: "center",
-                  marginHorizontal: 8,
-                }}
+                style={[
+                  styles.addEditCategoryContainer,
+                  { maxWidth: columnWidth },
+                ]}
               >
                 <AddEditCategory category={item} />
               </View>
@@ -68,12 +47,12 @@ export const ManageCategoriesScreen = () => {
             keyExtractor={(item) => item.id}
             key={columns}
             ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-            contentContainerStyle={{
-              justifyContent: "center",
-              marginLeft: "auto",
-              marginRight: "auto",
-              width: (columnWidth + 16) * columns,
-            }}
+            contentContainerStyle={[
+              styles.listContainer,
+              {
+                width: (columnWidth + 16) * columns,
+              },
+            ]}
           />
         </KeyboardAvoidingView>
       </View>
@@ -91,6 +70,18 @@ const styles = StyleSheet.create({
   addCategoryContainer: {
     maxWidth: 320,
     alignSelf: "center",
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 30,
+  },
+  addEditCategoryContainer: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    marginHorizontal: 8,
+  },
+  listContainer: {
+    justifyContent: "center",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 });
