@@ -59,7 +59,6 @@ export const ManageCategoriesScreen = () => {
                   width: "100%",
                   maxWidth: columnWidth,
                   alignItems: "center",
-                  justifyContent: "center",
                   marginHorizontal: 8,
                 }}
               >
