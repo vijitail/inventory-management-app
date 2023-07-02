@@ -28,10 +28,11 @@ export const AddEditCategory = ({ category }: AddEditCategoryProps) => {
       <Card.Title
         title={categoryName || "Untitled Category"}
         subtitle={
-          category.attributes[category.titleAttributeId]?.name &&
-          `Title Attribute: ${
-            category.attributes[category.titleAttributeId].name
-          }`
+          category.attributes[category.titleAttributeId]?.name
+            ? `Title Attribute: ${
+                category.attributes[category.titleAttributeId].name
+              }`
+            : `Title Attribute not set`
         }
       />
 

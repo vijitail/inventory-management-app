@@ -105,6 +105,8 @@ export const useCategoryStore = create<CategoryState>()(
         const category = categories[categoryId];
 
         delete category.attributes[attributeId];
+        if (category.titleAttributeId === attributeId)
+          category.titleAttributeId = "";
 
         editCategory(category);
       },
