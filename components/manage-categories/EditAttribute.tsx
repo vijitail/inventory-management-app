@@ -1,9 +1,8 @@
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Attribute, AttributeDataTypes } from "../../types";
 import { IconButton, TextInput } from "react-native-paper";
 import { useCategoryStore } from "../../stores/category-store";
 import { AttributeTypeSelector } from "./AttributeTypeSelector";
-import debounce from "lodash.debounce";
 
 export interface EditAttributeProps {
   categoryId: string;
@@ -16,22 +15,8 @@ export const EditAttribute = ({
 }: EditAttributeProps) => {
   const editAttribute = useCategoryStore((state) => state.editAttribute);
   const removeAttribute = useCategoryStore((state) => state.removeAttribute);
-  const category = useCategoryStore((state) => state.categories[categoryId]);
-
-  const validateAttributeName = debounce((text: string) => {
-    const existingAttributeName = Object.values(
-      category?.attributes || {}
-    ).find((attr) => attr.name === text && attribute.id !== attr.id);
-
-    if (existingAttributeName)
-      Alert.alert("Duplicate attribute name found!", undefined, [
-        { text: "Okay", onPress: () => handleAttributeTextChange("") },
-      ]);
-  }, 200);
 
   const handleAttributeTextChange = (text: string) => {
-    if (text) validateAttributeName(text);
-
     const updateAttribute = { ...attribute, name: text };
     editAttribute(categoryId, updateAttribute);
   };
